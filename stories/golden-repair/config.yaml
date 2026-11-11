@@ -1,0 +1,21 @@
+# Short reflection. Steady, warm voice; quiet still-life pictures; captions higher up.
+project:
+  aspect: "9:16"
+  style: "soft painterly still life, warm muted earth tones, dark background, gentle window light, shallow depth of field, minimal composition"
+  negative_prompt: "text, letters, words, watermark, signature, border, frame, hands, fingers, faces, cluttered, cartoon, blurry"
+speech:
+  voice: bf_emma
+  speed: 0.94
+timing:
+  pad_start_s: 0.25
+  pad_end_s: 0.6
+  min_scene_s: 1.6
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.6, max_cue_s: 3.0}
+  style: {font_size_ratio: 0.072, margin_bottom_ratio: 0.3, outline_px: 6}
+planning:
+  min_scene_words: 3
+  max_scene_words: 22
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}

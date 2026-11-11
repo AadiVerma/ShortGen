@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Linux / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      # No GPU and no model downloads: the suite uses fake providers.
+      # ffmpeg is needed for the real-render tests; the font is for captions.
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
+
+      - name: Install shortgen
+        run: python -m pip install -e ".[dev,mcp]"
+
+      - name: Lint
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Type check
+        run: mypy
+
+      - name: Test
+        run: pytest --cov --cov-report=term-missing
+
+      - name: Smoke test (fake models, real ffmpeg)
+        run: ./scripts/smoke.sh
+
+  macos:
+    name: macOS / Python 3.12
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install shortgen
+        run: python -m pip install -e ".[dev,mcp]"
+
+      # ffmpeg is not installed here, so tests marked `ffmpeg` skip themselves.
+      # This job checks that everything else behaves on macOS.
+      - name: Test
+        run: pytest

@@ -1,0 +1,21 @@
+# Original horror micro-story. Slow, low voice; long pauses; dark stills.
+project:
+  aspect: "9:16"
+  style: "dark cinematic digital painting, cold blue fog, warm orange lantern glow, film grain, eerie quiet atmosphere"
+  negative_prompt: "text, letters, words, numbers, watermark, signature, border, frame, people, faces, gore, blood, bright daylight, cartoon, blurry"
+speech:
+  voice: af_nicole
+  speed: 0.9
+timing:
+  pad_start_s: 0.25
+  pad_end_s: 0.7
+  min_scene_s: 1.6
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.6, max_cue_s: 3.0}
+  style: {font_size_ratio: 0.07, margin_bottom_ratio: 0.24, outline_px: 6}
+planning:
+  min_scene_words: 3
+  max_scene_words: 22
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}

@@ -1,0 +1,26 @@
+# A traditional fable for young children, retold. Warm, lively voice; big captions.
+project:
+  aspect: "9:16"
+  # Bright and rounded with big eyes: what small children's shows look like.
+  style: "cute 3D animated cartoon, bright saturated colors, sunny warm lighting, rounded shapes, simple background"
+  negative_prompt: "text, letters, words, numbers, watermark, signature, border, frame, realistic, photorealistic, detailed feathers, grown-up bird, sharp claws, scary, creepy, sharp teeth, red eyes, dark, night, people, human, photo, blurry, deformed"
+# The crow looks the same in every scene that says "crow" because this description is added to it.
+characters:
+  - name: crow
+    description: "a tiny round fluffy black baby crow chick with huge shiny eyes"
+speech:
+  voice: af_heart      # the voice model's best-rated voice
+  speed: 0.95
+timing:
+  pad_start_s: 0.2
+  pad_end_s: 0.5
+  min_scene_s: 1.8
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.7, max_cue_s: 3.0}
+  style: {font_size_ratio: 0.085, margin_bottom_ratio: 0.26, outline_px: 8, primary_color: "#FFE14D"}
+planning:
+  min_scene_words: 3
+  max_scene_words: 22
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}

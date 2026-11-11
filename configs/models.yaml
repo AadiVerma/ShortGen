@@ -1,0 +1,358 @@
+# Model registry: the single place a model's ID, adapter and license are recorded.
+#
+# No weights live in this repository. Models marked `weights_host: huggingface`
+# download into the Hugging Face cache on first use; `ollama` models are pulled
+# with `ollama pull`.
+#
+# License fields describe the *weights*, not shortgen's code (Apache-2.0), and
+# were read from each model card when the entry was added. Licenses change:
+# check the `source` link before any commercial use.
+#
+# To add a model: write one adapter (docs/adding-a-model.md) and add one entry.
+
+models:
+  # ----------------------------------------------------------------- planners
+  heuristic:
+    kind: planner
+    adapter: shortgen.adapters.heuristic_planner:HeuristicPlanner
+    license: none (no model weights)
+    commercial_use: true
+    notes: Rule-based scene splitting. No LLM, no download. Cannot write a script from a topic.
+
+  ollama:
+    kind: planner
+    adapter: shortgen.adapters.ollama_planner:OllamaPlanner
+    model_id: "qwen2.5:7b"
+    license: Apache-2.0
+    commercial_use: true
+    source: https://ollama.com/library/qwen2.5
+    weights_host: ollama
+    min_memory_gb: 8
+    notes: >-
+      Needs a running Ollama server (free, local). Writes image prompts and
+      camera moves, and can write a script from a topic. Any Ollama model
+      works; set model_id in your own registry file and record its license.
+    options:
+      host: http://127.0.0.1:11434
+      temperature: 0.7
+      timeout_s: 300
+      keep_alive: 5m
+
+  fake_planner:
+    kind: planner
+    adapter: shortgen.adapters.fake:FakePlanner
+    license: none (no model weights)
+    commercial_use: true
+    notes: Testing only. Heuristic planning plus a canned script for topics.
+
+  # ------------------------------------------------------------------- speech
+  kokoro_onnx:
+    kind: speech
+    adapter: shortgen.adapters.kokoro_onnx_speech:KokoroOnnxSpeech
+    model_id: hexgrad/Kokoro-82M
+    license: Apache-2.0
+    commercial_use: true
+    source: https://github.com/thewh1teagle/kokoro-onnx
+    requires: [kokoro_onnx, numpy]
+    install_hint: "pip install 'shortgen[speech]'"
+    devices: [cuda, mps, cpu]
+    min_memory_gb: 2
+    notes: >-
+      The same Kokoro-82M weights, exported to ONNX by the kokoro-onnx project
+      (MIT code). Runs on the CPU through ONNX Runtime, needs no PyTorch, and
+      returns word timings for English. The two files (about 350 MB) download
+      from that project's GitHub releases on first use and are checked against
+      the SHA-256 hashes below. Verified by the shortgen authors on Linux x86-64.
+    options:
+      lang: en-us
+      sample_rate: 24000      # fixed by the model
+      model:
+        path: ~/.cache/shortgen/kokoro-onnx/kokoro-v1.0.onnx
+        url: https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/kokoro-v1.0.onnx
+        sha256: beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a
+      voices:
+        path: ~/.cache/shortgen/kokoro-onnx/voices-v1.0.bin
+        url: https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/voices-v1.0.bin
+        sha256: bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d
+
+  kokoro:
+    kind: speech
+    adapter: shortgen.adapters.kokoro_speech:KokoroSpeech
+    model_id: hexgrad/Kokoro-82M
+    license: Apache-2.0
+    commercial_use: true
+    source: https://huggingface.co/hexgrad/Kokoro-82M
+    weights_host: huggingface
+    requires: [kokoro, torch, numpy]
+    install_hint: "pip install 'shortgen[speech-torch]'  (Python 3.11 or 3.12)"
+    devices: [cuda, cpu]
+    min_memory_gb: 2
+    notes: >-
+      The original PyTorch release of Kokoro. Runs on CUDA when present and
+      on CPU otherwise (MPS is not used). Gives native word timestamps for
+      English. Not yet run against real weights by the shortgen authors; the
+      default is kokoro_onnx, which has been.
+    options:
+      lang_code: a            # a = American English, b = British English
+      sample_rate: 24000      # fixed by the model
+      use_gpu: true
+
+  fake_speech:
+    kind: speech
+    adapter: shortgen.adapters.fake:FakeSpeech
+    license: none (no model weights)
+    commercial_use: true
+    notes: Testing only. Writes a quiet tone whose length follows the word count.
+    options:
+      sample_rate: 24000
+      seconds_per_word: 0.3
+      tone_hz: 220
+      native_timings: true
+
+  # -------------------------------------------------------------- transcribers
+  faster_whisper:
+    kind: transcriber
+    adapter: shortgen.adapters.whisper_faster:FasterWhisperTranscriber
+    model_id: Systran/faster-whisper-small
+    license: MIT
+    commercial_use: true
+    source: https://huggingface.co/Systran/faster-whisper-small
+    weights_host: huggingface
+    requires: [faster_whisper]
+    install_hint: "pip install 'shortgen[whisper]'"
+    devices: [cuda, cpu]
+    min_memory_gb: 2
+    notes: CTranslate2 Whisper. CUDA on Linux, CPU elsewhere (including Apple Silicon).
+    options:
+      model: small            # the size name faster-whisper resolves to model_id
+      beam_size: 5
+      cuda_compute_type: float16
+      cpu_compute_type: int8
+
+  mlx_whisper:
+    kind: transcriber
+    adapter: shortgen.adapters.whisper_mlx:MlxWhisperTranscriber
+    model_id: mlx-community/whisper-large-v3-turbo
+    license: MIT (OpenAI Whisper's license; the MLX conversion's card declares none)
+    commercial_use: true
+    source: https://huggingface.co/mlx-community/whisper-large-v3-turbo
+    weights_host: huggingface
+    requires: [mlx_whisper]
+    install_hint: "pip install 'shortgen[mlx]'  (Apple Silicon only)"
+    devices: [mps]
+    min_memory_gb: 4
+    notes: Whisper on Apple's MLX framework; the fast option on a Mac.
+    options: {}
+
+  proportional:
+    kind: transcriber
+    adapter: shortgen.adapters.proportional_aligner:ProportionalAligner
+    license: none (no model weights)
+    commercial_use: true
+    notes: >-
+      No recognition at all: word timings are estimated from word length.
+      Good enough for short scenes; use it when no Whisper is installed.
+
+  # ------------------------------------------------------------------- images
+  sdxl:
+    kind: image
+    adapter: shortgen.adapters.sdxl_image:SdxlImage
+    model_id: stabilityai/stable-diffusion-xl-base-1.0
+    license: CreativeML Open RAIL++-M
+    commercial_use: true
+    source: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
+    weights_host: huggingface
+    extra_weights:
+      - repo: madebyollin/sdxl-vae-fp16-fix
+        purpose: VAE that stays stable in half precision
+        license: MIT
+        commercial_use: true
+      - repo: h94/IP-Adapter
+        purpose: reference-image conditioning, loaded only for scenes with a reference image
+        license: Apache-2.0
+        commercial_use: true
+    requires: [torch, diffusers, transformers, PIL]
+    install_hint: "pip install 'shortgen[image]'"
+    devices: [cuda, mps, cpu]
+    min_memory_gb: 12
+    notes: >-
+      The RAIL++-M license allows commercial use but carries use restrictions;
+      read it. Reference images use IP-Adapter (first reference per scene).
+    options:
+      vae_id: madebyollin/sdxl-vae-fp16-fix
+      steps: 30
+      guidance_scale: 6.5
+      max_area: 1048576       # SDXL's native 1024x1024 pixel budget
+      size_multiple: 64
+      cpu_offload: false      # CUDA only: trade speed for lower VRAM
+      ip_adapter_repo: h94/IP-Adapter
+      ip_adapter_subfolder: sdxl_models
+      ip_adapter_weight: ip-adapter_sdxl.bin   # the file name used in the diffusers IP-Adapter guide
+      ip_adapter_scale: 0.6
+
+  flux_schnell:
+    kind: image
+    adapter: shortgen.adapters.flux_image:FluxImage
+    model_id: black-forest-labs/FLUX.1-schnell
+    license: Apache-2.0
+    commercial_use: true
+    source: https://huggingface.co/black-forest-labs/FLUX.1-schnell
+    weights_host: huggingface
+    requires: [torch, diffusers, transformers, PIL, sentencepiece]
+    install_hint: "pip install 'shortgen[image]'"
+    devices: [cuda]
+    min_memory_gb: 24
+    notes: >-
+      12B-parameter transformer: too large for a 16 GB Mac at full precision.
+      No reference-image support. FLUX.1-dev is NOT registered because its
+      license is non-commercial.
+    options:
+      steps: 4
+      guidance_scale: 0.0
+      max_sequence_length: 256
+      max_area: 1048576
+      size_multiple: 16
+      cpu_offload: true
+
+  folder:
+    kind: image
+    adapter: shortgen.adapters.folder_image:FolderImage
+    license: none (no model weights)
+    commercial_use: true
+    notes: >-
+      Bring your own pictures: reads <directory>/<scene id>.png (or .jpg,
+      .jpeg, .webp) for each scene. You are responsible for the rights to the
+      images you supply.
+    options:
+      directory: art          # relative to the project directory
+
+  fake_image:
+    kind: image
+    adapter: shortgen.adapters.fake:FakeImage
+    license: none (no model weights)
+    commercial_use: true
+    notes: Testing only. Writes a colour gradient derived from the prompt and seed.
+    options:
+      max_area: 147456
+      size_multiple: 16
+
+  # -------------------------------------------------------------------- video
+  kenburns:
+    kind: video
+    adapter: shortgen.adapters.kenburns_video:KenBurnsVideo
+    license: none (no model weights)
+    commercial_use: true
+    notes: >-
+      Not a neural model: a slow zoom or pan over the still, rendered by
+      ffmpeg. Runs anywhere in seconds and is the default so the pipeline
+      works on a 16 GB laptop.
+    options:
+      zoom: 1.18              # how far a zoom travels; pans hold this zoom
+      supersample: 2          # scale the still up first for smoother sub-pixel motion
+      video_codec: libx264
+      preset: veryfast
+      crf: 14
+      pixel_format: yuv420p
+
+  wan:
+    kind: video
+    adapter: shortgen.adapters.wan_video:WanVideo
+    model_id: Wan-AI/Wan2.2-TI2V-5B-Diffusers
+    license: Apache-2.0
+    commercial_use: true
+    source: https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers
+    weights_host: huggingface
+    requires: [torch, diffusers, transformers, PIL, ftfy]
+    install_hint: "pip install 'shortgen[video]'"
+    devices: [cuda]
+    min_memory_gb: 24
+    notes: >-
+      Real image-to-video. The model card asks for a 24 GB GPU; it is not
+      expected to fit on a 16 GB Mac. Unverified on real hardware by the
+      shortgen authors, see docs/hardware.md.
+    options:
+      steps: 50
+      guidance_scale: 5.0
+      max_area: 901120        # 704x1280, the model's native 720p budget
+      native_fps: 24
+      max_frames: 121         # about 5 s; must be 4k+1
+      cpu_offload: true
+      video_codec: libx264
+      preset: veryfast
+      crf: 14
+      pixel_format: yuv420p
+      negative_prompt: >-
+        static, still picture, blurred details, subtitles, text, watermark,
+        worst quality, low quality, jpeg artifacts, deformed, disfigured,
+        extra fingers, fused fingers, messy background
+
+  fake_video:
+    kind: video
+    adapter: shortgen.adapters.fake:FakeVideo
+    license: none (no model weights)
+    commercial_use: true
+    notes: Testing only. Writes a placeholder file that is not a playable video.
+
+  # ------------------------------------------------ hosted, paid (never a default)
+  # The two entries below are the only ones that do not run on your machine.
+  # Each scene is sent to Higgsfield and spends credits on your account. They
+  # need `pip install 'shortgen[hosted]'` and an API key (HF_KEY, a Higgsfield
+  # variable, not a Hugging Face one). Select them with configs/higgsfield.yaml.
+  #
+  # NOT VERIFIED against the live service. `model_id` and the argument names
+  # come from Higgsfield's published examples; check its documentation for the
+  # model ids your account offers and override them here or in your own
+  # `runtime.models_file`.
+  higgsfield_image:
+    kind: image
+    adapter: shortgen.adapters.higgsfield_image:HiggsfieldImage
+    model_id: bytedance/seedream/v4/text-to-image
+    license: Higgsfield terms of service (hosted, paid)
+    commercial_use: null      # decided by your Higgsfield plan and its terms, not checked here
+    hosted: true
+    source: https://cloud.higgsfield.ai
+    requires: [higgsfield_client, httpx]
+    install_hint: "pip install 'shortgen[hosted]'"
+    notes: >-
+      Hosted and paid: prompts leave your machine. Model id and arguments are
+      from the higgsfield-client README example; not run by the shortgen
+      authors.
+    options:
+      resolution: 2K
+      reference_argument: null  # set to the argument name your model documents for
+                                # input images to upload character reference images
+      arguments: {}             # extra arguments sent with every job
+      job_timeout_s: 600        # how long to wait for one image
+      poll_interval_s: 3
+      request_timeout_s: 90     # one HTTP request
+      download_attempts: 3
+      max_download_mb: 64
+      job_cache: ~/.cache/shortgen/higgsfield   # request ids of unfinished jobs
+
+  higgsfield_video:
+    kind: video
+    adapter: shortgen.adapters.higgsfield_video:HiggsfieldVideo
+    model_id: higgsfield-ai/dop/standard
+    license: Higgsfield terms of service (hosted, paid)
+    commercial_use: null
+    hosted: true
+    source: https://cloud.higgsfield.ai
+    requires: [higgsfield_client, httpx]
+    install_hint: "pip install 'shortgen[hosted]'"
+    notes: >-
+      Hosted and paid: each scene's picture and motion prompt leave your
+      machine, and video costs far more credits than images. The model id and
+      argument names come from examples in Higgsfield's API documentation and
+      are the least certain values in this registry; not run by the shortgen
+      authors.
+    options:
+      durations_s: [5]          # clip lengths the model offers; longer usually costs more
+      image_argument: image_url
+      duration_argument: duration   # null to not send a duration
+      arguments: {}
+      job_timeout_s: 1200       # how long to wait for one clip
+      poll_interval_s: 5
+      request_timeout_s: 90
+      download_attempts: 3
+      max_download_mb: 512
+      job_cache: ~/.cache/shortgen/higgsfield

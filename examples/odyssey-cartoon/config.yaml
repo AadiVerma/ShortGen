@@ -1,0 +1,18 @@
+# Format: cartoon myth explainer. Landscape, fast cuts, short one-line captions.
+project:
+  aspect: "16:9"
+  style: "bold cartoon illustration, thick dark outlines, flat warm colors, expressive characters, storybook background"
+  negative_prompt: "text, watermark, photo, realistic, 3d render, blurry, extra limbs"
+planning:
+  min_scene_words: 4
+  max_scene_words: 16          # every paragraph of script.md stays one scene
+speech:
+  voice: am_michael
+  speed: 1.05
+timing:
+  pad_start_s: 0.1
+  pad_end_s: 0.25
+  min_scene_s: 1.2
+subtitles:
+  rules: {max_lines: 1, max_gap_s: 0.5, min_cue_s: 0.5, max_cue_s: 2.5}
+  style: {font_size_ratio: 0.07, margin_bottom_ratio: 0.09, outline_px: 6}

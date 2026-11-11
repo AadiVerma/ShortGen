@@ -1,0 +1,24 @@
+# Format: vertical "did you know" facts short. Big upper-case captions, upbeat voice.
+project:
+  aspect: "9:16"
+  # The style is added to every picture, so the character's colour lives here: that is
+  # what keeps the octopus the same from scene to scene. "poster" and "infographic"
+  # are avoided on purpose: they made the model draw fake text.
+  style: "flat vector illustration, bold clean shapes, coral orange octopus, deep navy blue ocean background, soft glow, single centered subject, simple background"
+  negative_prompt: "text, letters, words, numbers, labels, watermark, signature, border, frame, repeating pattern, collage, many octopuses, photo, blurry"
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}
+planning:
+  min_scene_words: 3
+  max_scene_words: 18
+speech:
+  voice: af_heart
+  speed: 1.05
+timing:
+  pad_start_s: 0.1
+  pad_end_s: 0.25
+  min_scene_s: 1.2
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.5, max_cue_s: 2.5}
+  style: {font_size_ratio: 0.085, margin_bottom_ratio: 0.26, outline_px: 7, uppercase: true, primary_color: "#FFE14D"}

@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+
+# Generated projects, model weights and media are never committed
+projects/
+e2e-runs/
+# Files the Claude desktop app saves into a connected folder
+Claude outputs/
+# Outputs created when an example or story folder is run in place
+examples/*/manifest.json
+examples/*/audio/
+examples/*/alignment/
+examples/*/images/
+examples/*/clips/
+examples/*/subtitles/
+examples/*/build/
+examples/*/output/
+stories/*/manifest.json
+stories/*/audio/
+stories/*/alignment/
+stories/*/images/
+stories/*/clips/
+stories/*/subtitles/
+stories/*/build/
+stories/*/output/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.gguf
+*.onnx
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/

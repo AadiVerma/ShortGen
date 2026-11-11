@@ -1,0 +1,27 @@
+# OPTIONAL: pictures and animation from Higgsfield, a HOSTED, PAID service.
+#
+# This is the one profile that is not free and not local. With it, each
+# scene's picture description and the generated picture are sent to
+# Higgsfield, and every image and every clip spends credits on your account.
+# Narration, captions and the final render still run on your machine.
+#
+#   pip install 'shortgen[hosted]'
+#   export HF_KEY='your-key:your-secret'      # from https://cloud.higgsfield.ai
+#   shortgen --config configs/higgsfield.yaml doctor
+#   shortgen --config configs/higgsfield.yaml run examples/odyssey-cartoon
+#
+# Start with one short script: a 9-scene video is 9 image jobs and 9 video
+# jobs. To pay for pictures only and animate them locally with zoom and pan,
+# set `video: kenburns` below.
+#
+# Not verified against the live service; see docs/hosted.md.
+providers:
+  image: higgsfield_image
+  video: higgsfield_video
+
+# Other models your account offers can be selected in your own registry file
+# (runtime.models_file), e.g.
+#   models:
+#     higgsfield_video:
+#       model_id: kling-video/v2.1/pro/image-to-video
+#       options: {durations_s: [5, 10]}

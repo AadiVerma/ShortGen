@@ -1,0 +1,29 @@
+# Original story for young children. Warm, lively voice; big easy-to-read captions.
+project:
+  aspect: "9:16"
+  # Bright and rounded with big eyes: what small children's shows look like.
+  style: "cute 3D animated cartoon, bright saturated colors, soft warm lighting, rounded shapes, simple background"
+  negative_prompt: "text, letters, words, numbers, watermark, signature, border, frame, realistic, photorealistic, detailed feathers, grown-up bird, sharp claws, scary, creepy, sharp teeth, red eyes, people, human, photo, blurry, deformed"
+# Pip looks the same in every scene that names Pip because this description is added to it.
+# First test: "golden eyes" drew a realistic grown-up owl in one scene and a cartoon chick in
+# the next, and "blue night" turned the chick's feathers blue. The description is now the
+# cartoon chick, and scene lines keep colour words away from the owl.
+characters:
+  - name: Pip
+    description: "a tiny round fluffy brown baby owl chick with huge shiny dark eyes"
+speech:
+  voice: af_heart      # the voice model's best-rated voice; af_bella is the runner-up
+  speed: 0.95
+timing:
+  pad_start_s: 0.2
+  pad_end_s: 0.5
+  min_scene_s: 1.8
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.7, max_cue_s: 3.0}
+  style: {font_size_ratio: 0.085, margin_bottom_ratio: 0.26, outline_px: 8, primary_color: "#FFE14D"}
+planning:
+  min_scene_words: 3
+  max_scene_words: 22
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}

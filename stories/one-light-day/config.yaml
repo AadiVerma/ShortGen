@@ -1,0 +1,24 @@
+# Space fact with a date hook. Calm, clear voice; big white captions.
+project:
+  aspect: "9:16"
+  # First try used "retro space illustration, ... clean shapes": the model drew abstract
+  # art-deco shapes and a man on an alien planet. A style should say how to paint, not
+  # name a genre that brings its own subjects.
+  style: "cinematic space art, detailed digital painting, realistic spacecraft, black sky full of stars, cool blue shadows, warm gold highlights, sharp focus"
+  negative_prompt: "text, letters, words, numbers, logo, flag, watermark, signature, border, frame, people, man, astronaut, landscape, ground, mountains, rocket, abstract, art deco, poster, cartoon, blurry"
+speech:
+  voice: bm_george
+  speed: 0.98
+timing:
+  pad_start_s: 0.15
+  pad_end_s: 0.4
+  min_scene_s: 1.5
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.6, max_cue_s: 2.8}
+  style: {font_size_ratio: 0.075, margin_bottom_ratio: 0.26, outline_px: 6, uppercase: true}
+planning:
+  min_scene_words: 3
+  max_scene_words: 22
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}

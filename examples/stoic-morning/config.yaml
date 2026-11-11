@@ -1,0 +1,18 @@
+# Format: vertical motivation short. Steady voice, statue-and-stone imagery, minimal captions.
+project:
+  aspect: "9:16"
+  style: "monochrome marble statue photography, dramatic side lighting, dark stone background, classical sculpture, high contrast, minimal composition"
+  negative_prompt: "text, watermark, color, cartoon, cluttered, blurry"
+planning:
+  min_scene_words: 3
+  max_scene_words: 18
+speech:
+  voice: bm_lewis
+  speed: 0.95
+timing:
+  pad_start_s: 0.2
+  pad_end_s: 0.5
+  min_scene_s: 1.5
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.6, max_cue_s: 3.0}
+  style: {font_size_ratio: 0.075, margin_bottom_ratio: 0.45, outline_px: 6, uppercase: true}

@@ -1,0 +1,16 @@
+# Fake models + the real ffmpeg renderer: the whole pipeline in seconds, with
+# no downloads. Used by `make smoke`; also handy when hacking on a stage.
+#
+#   shortgen --config configs/smoke.yaml run examples/story.md
+#
+# The result is colour gradients with a test tone, not a real video.
+providers:
+  planner: heuristic
+  speech: fake_speech
+  transcriber: proportional
+  image: fake_image
+  video: kenburns
+render:
+  resolutions:
+    "9:16": {width: 540, height: 960}
+    "16:9": {width: 960, height: 540}

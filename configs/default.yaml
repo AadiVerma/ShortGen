@@ -1,0 +1,111 @@
+# shortgen defaults. Every tunable lives here; nothing is hard-coded in the code.
+#
+# Override order (later wins):
+#   1. this file
+#   2. <project>/config.yaml
+#   3. the file passed with --config
+#   4. environment variables: SHORTGEN__<SECTION>__<KEY>=value
+#      e.g. SHORTGEN__PROVIDERS__VIDEO=wan  or  SHORTGEN__RENDER__FINAL__CRF=20
+
+project:
+  aspect: "9:16"          # "9:16" or "16:9"
+  fps: 30
+  seed: 42                # scene N uses seed + N, so reruns are reproducible
+  language: en
+  style: "storybook illustration, soft painterly lighting, muted color palette, consistent character design"
+  negative_prompt: "text, watermark, logo, signature, blurry, low quality, deformed hands, extra fingers"
+
+# Names from configs/models.yaml. Everything below is free and local.
+# (Optional hosted, paid alternatives exist but are never selected here: docs/hosted.md.)
+providers:
+  planner: heuristic        # or: ollama
+  speech: kokoro_onnx       # or: kokoro (PyTorch build of the same model)
+  transcriber: proportional # only used when the speech model gives no word timings;
+                            # faster_whisper or mlx_whisper measure instead of estimating
+  image: sdxl               # or: flux_schnell
+  video: kenburns           # or: wan (needs a 24 GB GPU; see docs/hardware.md)
+
+# Per-provider overrides merged over the options in models.yaml, e.g.
+# provider_options:
+#   sdxl: {steps: 20}
+provider_options: {}
+
+# Recurring characters. A scene that mentions the name gets the description in
+# its prompt and, if the image model supports it, the reference image.
+# characters:
+#   - name: Mira
+#     description: "a young lighthouse keeper with a red scarf"
+#     reference_image: refs/mira.png     # relative to the project directory
+characters: []
+
+planning:
+  min_scene_words: 6
+  max_scene_words: 32
+  words_per_minute: 150
+  topic_target_words: 140
+  default_motion_prompt: "slow cinematic camera movement, gentle natural motion"
+  camera_cycle: [zoom_in, pan_right, zoom_out, pan_left]
+
+speech:
+  voice: af_heart
+  speed: 1.0
+
+timing:
+  pad_start_s: 0.15
+  pad_end_s: 0.35
+  min_scene_s: 1.5
+
+subtitles:
+  enabled: true
+  rules:
+    max_lines: 2
+    max_gap_s: 0.6
+    min_cue_s: 0.7
+    max_cue_s: 4.0
+  style:
+    font_name: Arial
+    font_fallbacks: [Helvetica, DejaVu Sans, Liberation Sans]   # then Pillow's built-in font
+    font_path: null               # or an explicit .ttf/.otf file
+    line_height_ratio: 1.25
+    font_size_ratio: 0.058        # of the frame's short side
+    char_width_ratio: 0.56        # average glyph width / font size, used for wrapping
+    margin_side_ratio: 0.08
+    margin_bottom_ratio: 0.2
+    primary_color: "#FFFFFF"
+    outline_color: "#000000"
+    outline_px: 4
+    shadow_px: 0
+    bold: true
+    uppercase: false
+
+render:
+  ffmpeg_bin: ffmpeg
+  ffprobe_bin: ffprobe
+  resolutions:
+    "9:16": {width: 1080, height: 1920}
+    "16:9": {width: 1920, height: 1080}
+  max_slowdown: 2.0             # how far a too-short clip may be slowed before its last frame is held
+  intermediate:                 # per-scene segments: fast, near-lossless, sample-exact audio
+    video_codec: libx264
+    preset: veryfast
+    crf: 12
+    pixel_format: yuv420p
+    audio_codec: pcm_s16le
+    audio_sample_rate: 48000
+  final:
+    video_codec: libx264
+    preset: medium
+    crf: 18
+    pixel_format: yuv420p
+    audio_codec: aac
+    audio_bitrate: 192k
+    audio_sample_rate: 48000
+
+runtime:
+  device: auto                  # auto | cuda | mps | cpu
+  max_attempts: 3               # per unit of work, for transient failures only
+  backoff_base_s: 2.0
+  backoff_max_s: 30.0
+  log_level: INFO
+  log_format: console           # console | json
+  models_file: null             # optional extra registry merged over configs/models.yaml

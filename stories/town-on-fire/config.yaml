@@ -1,0 +1,21 @@
+# Strange true history. Even, curious voice; hazy muted pictures.
+project:
+  aspect: "9:16"
+  style: "muted gouache illustration, autumn greys and rust orange, drifting haze, quiet empty atmosphere, film grain"
+  negative_prompt: "text, letters, words, numbers, signs, graffiti, watermark, signature, border, frame, people, faces, bright colors, cartoon, blurry"
+speech:
+  voice: am_michael
+  speed: 0.98
+timing:
+  pad_start_s: 0.15
+  pad_end_s: 0.45
+  min_scene_s: 1.5
+subtitles:
+  rules: {max_lines: 2, max_gap_s: 0.5, min_cue_s: 0.6, max_cue_s: 2.8}
+  style: {font_size_ratio: 0.072, margin_bottom_ratio: 0.25, outline_px: 6}
+planning:
+  min_scene_words: 3
+  max_scene_words: 22
+# Fewer drawing steps than the default 30: about a fifth less time per picture.
+provider_options:
+  sdxl: {steps: 24}

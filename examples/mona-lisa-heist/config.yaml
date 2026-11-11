@@ -1,0 +1,18 @@
+# Format: true-story heist explainer. Landscape, paper-collage look, calm British narrator.
+project:
+  aspect: "16:9"
+  style: "vintage paper collage, cut-out halftone photographs, cream textured paper, single red accent color, hand-drawn ink annotations, editorial illustration"
+  negative_prompt: "text, watermark, 3d render, neon colors, blurry"
+planning:
+  min_scene_words: 4
+  max_scene_words: 16
+speech:
+  voice: bm_george
+  speed: 1.0
+timing:
+  pad_start_s: 0.1
+  pad_end_s: 0.3
+  min_scene_s: 1.2
+subtitles:
+  rules: {max_lines: 1, max_gap_s: 0.5, min_cue_s: 0.5, max_cue_s: 2.5}
+  style: {font_size_ratio: 0.065, margin_bottom_ratio: 0.09, outline_px: 5}
