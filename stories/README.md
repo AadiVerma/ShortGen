@@ -40,6 +40,8 @@ The first real run of the image model showed what it is good and bad at, and the
 - **No people's faces, no hands, no recurring human character.** The model draws each scene from scratch, so a person would look different every time. Places, objects, animals and weather hold together across scenes.
 - **No text, diagrams, maps or exact counts in pictures.** The horror story never shows its seven lanterns as seven.
 - **The style line says how to paint, not what genre it is.** The first style tried for `one-light-day` began "retro space illustration"; the model answered with abstract art-deco shapes and a man standing on an alien planet. A genre name brings its own subjects. "No people" in a style is also read as "people"; exclusions go in `negative_prompt`.
+- **Keep things out of one picture with a `negative:` line.** The project's `negative_prompt` applies to every picture, so it cannot say "no moon" in a story that also shows the moon. A `<!-- negative: ... -->` line under a scene replaces it for that picture alone. `moon-night-off` uses it to keep lamps out of a dark bedroom.
+- **Adding a scene redraws every picture after it.** A scene's picture depends on its position in the script. To add a beat without losing good pictures, change what an existing scene shows instead.
 - **Motion is a slow zoom or pan over a still.** Scripts cut to a new picture every four or five seconds so the video does not feel static.
 
 ## Posting them
