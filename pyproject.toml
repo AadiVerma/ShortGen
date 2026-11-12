@@ -68,8 +68,8 @@ shortgen = "shortgen.cli:cli"
 shortgen-mcp = "shortgen.mcp_server:main"
 
 [project.urls]
-Homepage = "https://github.com/OWNER/shortgen"
-Issues = "https://github.com/OWNER/shortgen/issues"
+Homepage = "https://github.com/AadiVerma/ShortGen"
+Issues = "https://github.com/AadiVerma/ShortGen/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/shortgen"]

@@ -9,7 +9,7 @@ Thanks for looking. The most useful contributions right now are, in order:
 ## Setup
 
 ```bash
-git clone https://github.com/OWNER/shortgen && cd shortgen
+git clone https://github.com/AadiVerma/ShortGen && cd ShortGen
 python3.12 -m venv .venv && source .venv/bin/activate
 make install          # pip install -e ".[dev,mcp]"
 make check            # ruff, mypy --strict, pytest

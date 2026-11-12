@@ -65,5 +65,5 @@ First public version. Alpha: the pipeline, renderer, CLI and MCP server are test
 - The Ollama planner is tested against a stub of Ollama's API, not a real server.
 - One shot per scene; no background music; no word-by-word caption highlighting.
 
-[Unreleased]: https://github.com/OWNER/shortgen/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/OWNER/shortgen/releases/tag/v0.1.0
+[Unreleased]: https://github.com/AadiVerma/ShortGen/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/AadiVerma/ShortGen/releases/tag/v0.1.0

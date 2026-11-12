@@ -99,7 +99,7 @@ You need Python 3.11 or newer and any recent ffmpeg. The stock Homebrew or apt b
 **Try it in a minute, with no model downloads.** This runs the whole pipeline with fake models and the real renderer. The output is colour gradients with a test tone, but it proves your install and ffmpeg work.
 
 ```bash
-git clone https://github.com/OWNER/shortgen && cd shortgen
+git clone https://github.com/AadiVerma/ShortGen && cd ShortGen
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install -e .
 shortgen --config configs/smoke.yaml run examples/story.md

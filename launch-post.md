@@ -1,6 +1,6 @@
 # Launch thread (X)
 
-Draft, 8 posts. Every claim below matches what the code does today. Before posting: replace `OWNER` in the link, attach a real demo clip to post 1, and re-read post 7 against the current state of the adapters. If you have run them on real hardware by then, update it with what you measured.
+Draft, 8 posts. Every claim below matches what the code does today. Before posting: attach a real demo clip to post 1, and re-read post 7 against the current state of the adapters. If you have run them on real hardware by then, update it with what you measured.
 
 ---
 
@@ -86,4 +86,4 @@ Apache-2.0 code. Python, Pydantic, Typer, mypy strict. There's an MCP server so 
 
 If you try it on your machine, tell me what breaks.
 
-github.com/OWNER/shortgen
+github.com/AadiVerma/ShortGen
