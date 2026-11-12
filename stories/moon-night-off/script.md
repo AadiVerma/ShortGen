@@ -48,7 +48,8 @@ The bear held up a pancake. Then he ate it.
 <!-- image: a big friendly brown cartoon bear holding one round golden pancake above its head with both paws, dark tree trunks behind -->
 
 A tiny firefly said, I can do it. Everybody laughed. You are smaller than a crumb!
-<!-- image: a cartoon bear, a frog and an owl laughing together, looking down at one tiny glowing firefly in front of them, dark tree trunks behind -->
+<!-- image: a brown cartoon bear, a green frog and a brown owl laughing with open mouths, one tiny glowing yellow firefly floating between them, dark forest at night -->
+<!-- negative: text, letters, words, numbers, watermark, signature, border, frame, repeating pattern, collage, realistic, photorealistic, scary, creepy, photo, blurry, deformed, daylight, sunlight, bright sky -->
 
 But in one window, a little girl could not sleep.
 <!-- image: a little cartoon girl with short dark hair in yellow pyjamas sitting up in bed hugging her pillow, wide awake, dark bedroom at night -->
