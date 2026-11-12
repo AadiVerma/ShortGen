@@ -262,7 +262,7 @@ Meet Odysseus, king of a small island called Ithaca.
 <!-- camera: zoom_in -->
 ```
 
-`motion:` and `camera:` (`static`, `zoom_in`, `zoom_out`, `pan_left`, `pan_right`, `pan_up`, `pan_down`) work the same way. Without an `image:` line the narration itself is the picture prompt, which is rarely a good description of a picture. With `providers.planner: ollama`, a local LLM writes these descriptions for scenes that have none.
+`motion:` and `camera:` (`static`, `zoom_in`, `zoom_out`, `pan_left`, `pan_right`, `pan_up`, `pan_down`) work the same way. A `negative:` line says what that one picture must not show, such as `<!-- negative: lamp, ceiling light, text -->` for a room that is meant to be dark; it replaces the project's `negative_prompt` for that scene only. Without an `image:` line the narration itself is the picture prompt, which is rarely a good description of a picture. With `providers.planner: ollama`, a local LLM writes these descriptions for scenes that have none.
 
 ### Configuration
 

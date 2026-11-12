@@ -58,6 +58,8 @@ class Shot(FrozenModel):
     image_prompt: str = Field(min_length=1)
     motion_prompt: str
     camera: CameraMove
+    #: What this one picture must not show. Empty means the project's ``negative_prompt``.
+    negative_prompt: str = ""
 
 
 class Scene(FrozenModel):

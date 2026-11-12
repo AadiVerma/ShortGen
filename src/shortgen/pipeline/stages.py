@@ -232,7 +232,7 @@ class ImageStage(Stage[ImageInputs]):
                 scene.id,
                 ImageInputs(
                     prompt=compose_image_prompt(scene, project.style, ctx.config.characters),
-                    negative_prompt=project.negative_prompt,
+                    negative_prompt=scene.shot.negative_prompt or project.negative_prompt,
                     target=ctx.config.resolution,
                     seed=project.seed + scene.index,
                     references=self._references(ctx, scene),

@@ -17,7 +17,7 @@ from shortgen.errors import PlanningError
 
 _COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
 _DIRECTIVE = re.compile(
-    r"<!--\s*(image|motion|camera)\s*:\s*(.*?)\s*-->", re.DOTALL | re.IGNORECASE
+    r"<!--\s*(image|motion|camera|negative)\s*:\s*(.*?)\s*-->", re.DOTALL | re.IGNORECASE
 )
 _MARK = "\x00"  # brackets a direction's index while the text around it is cleaned
 _MARKED = re.compile(r"\x00(\d+)\x00")
@@ -47,6 +47,7 @@ class SceneEnrichment(FrozenModel):
     image_prompt: str = ""
     motion_prompt: str = ""
     camera: CameraMove | None = None
+    negative_prompt: str = ""
 
 
 def split_directed_paragraphs(script: str) -> list[tuple[str, SceneEnrichment]]:
@@ -59,7 +60,9 @@ def split_directed_paragraphs(script: str) -> list[tuple[str, SceneEnrichment]]:
         <!-- camera: zoom_in -->
 
     ``image`` replaces the narration as the picture prompt, ``motion`` and
-    ``camera`` do the same for movement. Any other comment is simply dropped.
+    ``camera`` do the same for movement, and ``negative`` replaces the project's
+    negative prompt for that one picture ("this room has no lamp"). Any other
+    comment is simply dropped.
     """
     directions: list[tuple[str, str]] = []
 
@@ -93,6 +96,7 @@ def _direction(found: Sequence[tuple[str, str]]) -> SceneEnrichment:
         image_prompt=values.get("image", ""),
         motion_prompt=values.get("motion", ""),
         camera=CameraMove(camera) if camera else None,
+        negative_prompt=values.get("negative", ""),
     )
 
 
@@ -180,6 +184,7 @@ def draft_scenes(
                 image_prompt=direction.image_prompt or narration,
                 motion_prompt=direction.motion_prompt or rules.default_motion_prompt,
                 camera=direction.camera or rules.camera_cycle[index % len(rules.camera_cycle)],
+                negative_prompt=direction.negative_prompt,
             ),
             characters=find_characters(narration, characters),
         )
@@ -211,6 +216,7 @@ def apply_enrichment(
             image_prompt=extra.image_prompt.strip() or scene.shot.image_prompt,
             motion_prompt=extra.motion_prompt.strip() or scene.shot.motion_prompt,
             camera=extra.camera or scene.shot.camera,
+            negative_prompt=extra.negative_prompt.strip() or scene.shot.negative_prompt,
         )
         enriched.append(scene.model_copy(update={"shot": shot}))
     return enriched

@@ -127,6 +127,17 @@ def test_directions_in_comments_set_the_shot_and_are_never_narrated(rules: Plann
     assert second.shot.motion_prompt == rules.default_motion_prompt
 
 
+def test_a_negative_direction_is_kept_for_that_scene_only(rules: PlanningRules) -> None:
+    script = (
+        "The room was dark.\n<!-- image: a dark bedroom -->\n"
+        "<!-- negative: lamp, ceiling light,\n   daylight -->\n\nThe moon came back."
+    )
+    dark, moonlit = draft_scenes(script, rules)
+    assert dark.narration == "The room was dark."
+    assert dark.shot.negative_prompt == "lamp, ceiling light, daylight"
+    assert moonlit.shot.negative_prompt == ""  # falls back to the project's negative prompt
+
+
 def test_every_scene_cut_from_a_paragraph_shares_its_direction(rules: PlanningRules) -> None:
     script = (
         "One two three four five six seven. Eight nine ten eleven twelve.\n<!-- image: a lamp -->"

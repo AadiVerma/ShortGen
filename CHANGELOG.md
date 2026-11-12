@@ -22,6 +22,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - A folder containing `script.md` becomes a project in place; editing a project's `script.md` is picked up on the next run.
 - Optional adapters for Higgsfield, a hosted, paid service: `higgsfield_image` and `higgsfield_video`, selected with `configs/higgsfield.yaml` and installed with the `hosted` extra. Off by default, flagged by `doctor`, and never resubmit a job that was already accepted. **Not run against the live service**; see `docs/hosted.md`.
 - Registry entries can declare `hosted: true`, and `commercial_use: null` when a service's terms decide.
+- A `<!-- negative: ... -->` line under a scene replaces the project's negative prompt for that one picture, so a single scene can keep lamps, moons or people out (or let people in) without redrawing the others.
 - Captions break at clauses and avoid dangling function words. Caption font lookup with fallbacks and a `font_path` override; `doctor` reports the font in use.
 
 ### Verified

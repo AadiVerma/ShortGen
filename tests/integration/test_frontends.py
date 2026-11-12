@@ -314,6 +314,23 @@ def test_every_command_sees_an_edited_script_not_only_run(tmp_path: Path) -> Non
     assert all(stage.note is None for stage in settled.stages)
 
 
+def test_a_negative_line_redraws_only_its_own_scene(tmp_path: Path) -> None:
+    folder = tmp_path / "my-short"
+    folder.mkdir()
+    (folder / "script.md").write_text(directed("a dark bedroom"))
+    app.execute(folder, [StageName.PLAN, StageName.IMAGE], env=FAKE_ENV)
+
+    with_negative = directed("a dark bedroom -->\n<!-- negative: lamp, ceiling light")
+    (folder / "script.md").write_text(with_negative)
+    summary = app.execute(folder, [StageName.IMAGE], env=FAKE_ENV)
+
+    assert {stage.stage: stage.completed for stage in summary.stages} == {"plan": 1, "image": 1}
+    ctx = app.build_context(folder, env=FAKE_ENV)
+    scenes = ctx.store.load().project.scenes
+    assert [scene.shot.negative_prompt for scene in scenes] == ["", "lamp, ceiling light", ""]
+    assert "lamp" not in ctx.config.project.negative_prompt  # the project's own list is untouched
+
+
 def test_commands_other_than_run_work_on_a_brand_new_story_folder(tmp_path: Path) -> None:
     folder = tmp_path / "new-story"
     folder.mkdir()
